@@ -1,0 +1,5 @@
+vector_store: faiss
+embedding_model: text-embedding-3-large
+pgvector_dsn: ${MRI_DB_URL}
+namespace_prefix: cia
+resonance_threshold: 0.78
