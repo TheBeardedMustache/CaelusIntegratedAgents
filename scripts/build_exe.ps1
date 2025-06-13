@@ -1,29 +1,25 @@
-# Build the Caelus Integrated Agents executable
+param ()
+$ErrorActionPreference = "Stop"
 
-$venvPath = '.venv'
-if (!(Test-Path $venvPath)) {
-    python -m venv $venvPath
-}
-
-& (Join-Path $venvPath 'Scripts/Activate.ps1')
-
-function Ensure-Package($Name) {
-    if (-not (pip show $Name > $null 2>&1)) {
-        pip install $Name
+function Ensure-Venv {
+    if (-not (Test-Path ".venv")) {
+        python -m venv .venv
+    }
+    if ($env:OS -eq "Windows_NT") {
+        . .venv\Scripts\Activate.ps1
+    } else {
+        . .venv/bin/activate
     }
 }
 
-Ensure-Package 'pyinstaller'
-Ensure-Package 'PySide6'
+Ensure-Venv
+pip install -q --upgrade -r requirements.txt
+pip install -q --upgrade pyinstaller pyside6
 
-pyinstaller 'desktop_app/resources/installer.spec'
+pyinstaller --noconfirm desktop_app/resources/installer.spec
 
 $sha = (git rev-parse --short HEAD).Trim()
-$releaseDir = 'releases'
-if (!(Test-Path $releaseDir)) { New-Item -ItemType Directory -Path $releaseDir | Out-Null }
+mkdir -Force releases | Out-Null
+Move-Item dist\CaelusIntegratedAgents.exe "releases\CaelusIntegratedAgents-$sha.exe" -Force
+Write-Host "`e[32mSUCCESS:`e[0m releases\CaelusIntegratedAgents-$sha.exe"
 
-$builtExe = 'dist/CaelusIntegratedAgents.exe'
-$destExe = Join-Path $releaseDir "CaelusIntegratedAgents-$sha.exe"
-Move-Item $builtExe $destExe -Force
-
-Write-Host "SUCCESS: built $destExe" -ForegroundColor Green
