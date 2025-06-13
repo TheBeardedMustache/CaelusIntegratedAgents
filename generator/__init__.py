@@ -1,9 +1,4 @@
 from .agent_generator import AgentGenerator
+from .agent import Agent
 
-
-class Agent:
-    """Agent Generator agent."""
-
-    def run(self) -> None:
-        """Run the agent."""
-        raise NotImplementedError()
+__all__ = ["Agent", "AgentGenerator"]

@@ -1,57 +1,34 @@
-import types
+import datetime as _dt
 from pathlib import Path
 
 from research_extractor import Agent
 
 
-class DummyMessage:
-    def __init__(self, content: str, flags=None, citation: str | None = None):
-        self._data = {
-            "content": content,
-            "flags": flags or [],
-            "citation": citation,
-        }
-
-    def model_dump(self):  # pragma: no cover - simple data holder
-        return self._data
-
-
 def test_run_collects_research(tmp_path, monkeypatch):
-    messages = {
-        "1": [
-            DummyMessage("keep", ["Deep Research"], "cite1"),
-            DummyMessage("skip"),
-            DummyMessage("more", ["Deep Research"], "cite2"),
+    def fake_list_messages(cid: str):
+        return [
+            {"author": "u", "timestamp": "t1", "text": "keep", "tags": ["Deep Research"]},
+            {"author": "u", "timestamp": "t2", "text": "skip", "tags": []},
+            {"author": "u", "timestamp": "t3", "text": "more", "tags": ["Deep Research"]},
         ]
-    }
-
-    class DummyClient:
-        def __init__(self):
-            self.beta = types.SimpleNamespace(
-                threads=types.SimpleNamespace(
-                    messages=types.SimpleNamespace(
-                        list=lambda thread_id: types.SimpleNamespace(
-                            data=messages[thread_id]
-                        )
-                    )
-                )
-            )
 
     monkeypatch.setattr(
-        "research_extractor.openai.OpenAI", lambda: DummyClient()
+        "desktop_app.services.chatgpt_client.list_messages",
+        lambda cid: fake_list_messages(cid),
     )
     monkeypatch.chdir(tmp_path)
 
     agent = Agent()
     output = agent.run(["1"])
 
-    expected = tmp_path / "exports" / "research.md"
+    expected = tmp_path / "exports" / f"research_bundle_{_dt.date.today().isoformat()}.md"
     assert Path(output) == expected
     assert expected.exists()
 
     text = expected.read_text()
-    assert "keep" in text
-    assert "> cite1" in text
-    assert "more" in text
-    assert "> cite2" in text
+    assert "### 1" in text
+    assert "> u ‖ t1" in text
+    assert "> keep" in text
+    assert "> u ‖ t3" in text
+    assert "> more" in text
     assert "skip" not in text

@@ -9,11 +9,7 @@ a = Analysis(
         ('/lib/x86_64-linux-gnu/libEGL.so.1', 'lib'),
         ('/lib/x86_64-linux-gnu/libxkbcommon-x11.so.0', 'lib'),
     ],
-    datas=[
-        ('desktop_app/resources/icons', 'icons'),
-        ('desktop_app/resources/logging.yaml', '.'),
-        ('.env', '.'),
-    ],
+    datas=[],
     hiddenimports=['PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtWidgets'],
     hookspath=[],
     hooksconfig={},
@@ -22,6 +18,12 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
+
+a.datas += [
+    ('desktop_app/resources/icons', 'icons'),
+    ('desktop_app/resources/logging.yaml', '.'),
+]
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
