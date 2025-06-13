@@ -5,7 +5,10 @@ block_cipher = None
 a = Analysis(
     ['desktop_app/app.py'],
     pathex=[],
-    binaries=[],
+    binaries=[
+        ('/lib/x86_64-linux-gnu/libEGL.so.1', 'lib'),
+        ('/lib/x86_64-linux-gnu/libxkbcommon-x11.so.0', 'lib'),
+    ],
     datas=[
         ('desktop_app/resources/icons', 'icons'),
         ('desktop_app/resources/logging.yaml', '.'),
