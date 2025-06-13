@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import logging
-import re
 from pathlib import Path
+
+from slugify import slugify
 
 from cookiecutter.main import cookiecutter
 
@@ -28,7 +29,7 @@ class Agent:
 
         logger = logging.getLogger(__name__)
 
-        slug = re.sub(r"[^0-9a-zA-Z]+", "_", agent_name).strip("_").lower()
+        slug = slugify(agent_name)
         template = Path(__file__).resolve().parents[1] / "templates" / "caelus-agent"
         out_path = cookiecutter(
             str(template),
