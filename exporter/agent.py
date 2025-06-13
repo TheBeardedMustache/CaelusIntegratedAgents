@@ -3,8 +3,11 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from datetime import datetime
 
 from docx import Document
+
+log = logging.getLogger(__name__)
 
 
 class Agent:
@@ -33,14 +36,16 @@ class Agent:
             Absolute path to the generated document.
         """
 
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
+        log.setLevel(logging.INFO)
 
-        with open(canvas_json_path, "r", encoding="utf-8") as fh:
-            canvas = json.load(fh)
+        p = Path(canvas_json_path).expanduser().resolve()
+        if not p.exists():
+            raise FileNotFoundError(p)
+        data = json.loads(p.read_text(encoding="utf-8"))
 
-        export_dir = Path(out_dir or "exports")
-        export_dir.mkdir(exist_ok=True)
+        canvas_id = data.get("id", f"canvas_{p.stem}_{datetime.utcnow().isoformat()}")
+        out_root = Path(out_dir or "exports").resolve()
+        out_root.mkdir(parents=True, exist_ok=True)
 
         template_path = Path(template)
         if template_path.exists():
@@ -48,13 +53,12 @@ class Agent:
         else:
             doc = Document()
 
-        for block in canvas.get("blocks", []):
-            author = block.get("author", "")
+        for block in data.get("blocks", []):
+            author = block.get("author", "Unknown")
             text = block.get("text", "")
             doc.add_paragraph(f"{author}: {text}")
 
-        output_path = export_dir / f"{canvas.get('id', Path(canvas_json_path).stem)}.docx"
-        doc.save(output_path)
-        abs_path = str(output_path.resolve())
-        logger.info("Saved document to %s", abs_path)
-        return abs_path
+        out_path = out_root / f"{canvas_id}.docx"
+        doc.save(out_path)
+        log.info("Exported %s → %s", canvas_json_path, out_path)
+        return str(out_path)
