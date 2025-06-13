@@ -1,9 +1,14 @@
-import pytest
+from pathlib import Path
 
 from generator import Agent
 
 
-def test_run_not_implemented():
+def test_run_generates_package(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     agent = Agent()
-    with pytest.raises(NotImplementedError):
-        agent.run()
+    folder = Path(agent.run("My Agent", "demo"))
+
+    assert folder.exists()
+    assert folder.name == "my_agent"
+    assert (folder / "agent.py").exists()
+    assert (folder / "tests" / "test_basic.py").exists()
