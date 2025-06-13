@@ -8,7 +8,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('desktop_app/resources/icons', 'icons'),
-        ('logging.yaml', '.'),
+        ('desktop_app/resources/logging.yaml', '.'),
         ('.env', '.'),
     ],
     hiddenimports=['PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtWidgets'],
