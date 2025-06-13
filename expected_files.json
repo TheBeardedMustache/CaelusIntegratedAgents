@@ -1,5 +1,7 @@
 [
   ".github/workflows/ci.yml",
+  ".github/workflows/audit_skeleton.yml",
+  ".github/workflows/gui_release.yml",
   ".gitignore",
   "CaelusIntegratedAgents.spec",
   "README.md",
