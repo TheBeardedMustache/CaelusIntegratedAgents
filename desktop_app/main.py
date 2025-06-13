@@ -2,20 +2,17 @@
 
 from __future__ import annotations
 
-from PyQt5 import QtWidgets
+if __name__ == "__main__" and not __package__:
+    __package__ = "desktop_app"
 
-from .ui.main_window import Ui_MainWindow
+from os import path
+import sys
+sys.path.insert(0, path.abspath(path.join(path.dirname(__file__), "..")))
+__package__ = "desktop_app"
 
-
-def main() -> None:
-    """Launch the desktop application."""
-    app = QtWidgets.QApplication([])
-    window = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(window)
-    window.show()
-    app.exec_()
-
+# Delegate to the full application entry in app.py
+from desktop_app.app import main as run_app
 
 if __name__ == "__main__":  # pragma: no cover - manual launch
-    main()
+    import sys as _sys
+    _sys.exit(run_app())

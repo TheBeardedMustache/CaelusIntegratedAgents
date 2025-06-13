@@ -18,7 +18,7 @@ from apscheduler.triggers.cron import CronTrigger
 class AgentManager:
     """Launch agents and maintain watchdogs."""
 
-    def __init__(self, settings_path: str | Path | None = None) -> None:
+    def __init__(self, settings_path=None) -> None:
         self.scheduler = BackgroundScheduler()
         self.settings_path = Path(settings_path or Path(__file__).resolve().parents[1] / "settings.json")
         self.settings: Dict[str, Any] = self._load_settings()
@@ -49,7 +49,10 @@ class AgentManager:
         schedules = self.settings.get("schedules", {})
         for info in pkgutil.iter_modules(pkg.__path__):
             module = importlib.import_module(f"agents.{info.name}")
-            desc = (module.__doc__ or "").strip().splitlines()[0]
+            # Safely extract first line of docstring or default to empty
+            doc = module.__doc__ or ""
+            lines = doc.strip().splitlines()
+            desc = lines[0] if lines else ""
             last_run = schedules.get(info.name, {}).get("last_run")
             agents.append({"name": info.name, "description": desc, "last_run": last_run})
         return agents

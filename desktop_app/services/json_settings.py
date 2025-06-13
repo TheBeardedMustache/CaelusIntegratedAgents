@@ -6,7 +6,7 @@ from typing import Any, Dict
 class JsonSettings:
     """Simple JSON-based settings loader/saver."""
 
-    def __init__(self, path: str | Path | None = None) -> None:
+    def __init__(self, path=None) -> None:
         self.path = Path(path or Path(__file__).resolve().parents[1] / "settings.json")
 
     def load(self) -> Dict[str, Any]:

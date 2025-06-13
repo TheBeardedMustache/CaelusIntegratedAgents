@@ -12,7 +12,8 @@ class ApplicationState:
 
     stats: Dict[str, Any] = field(default_factory=dict)
 
-    _instance: "ApplicationState" | None = None
+    # Singleton instance
+    _instance = None
 
     def __new__(cls) -> "ApplicationState":
         if cls._instance is None:

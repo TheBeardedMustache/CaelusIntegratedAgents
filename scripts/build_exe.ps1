@@ -20,6 +20,17 @@ pip install -q --upgrade -r requirements.txt
 pip install -q --upgrade pyinstaller pyside6
 
 pyinstaller --noconfirm desktop_app/resources/installer.spec
+pip uninstall -y PyQt5 PyQt5-sip PyQt5-Qt5 2>$null
+pip install -q --upgrade pyinstaller pyside6
+pyinstaller `
+  --onefile --windowed `
+  --add-data "desktop_app/resources/icons;icons" `
+  --add-data "desktop_app/resources/logging.yaml;." `
+  --hidden-import PySide6.QtCore `
+  --hidden-import PySide6.QtGui `
+  --hidden-import PySide6.QtWidgets `
+  desktop_app/main.py
+
 
 $sha = (git rev-parse --short HEAD).Trim()
 mkdir -Force releases | Out-Null

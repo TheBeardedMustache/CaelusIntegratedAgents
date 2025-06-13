@@ -11,3 +11,4 @@ pyyaml==6.0.2
 pytest==8.1.1
 apscheduler==3.11.0
 python-slugify==8.0.1
+pyside6

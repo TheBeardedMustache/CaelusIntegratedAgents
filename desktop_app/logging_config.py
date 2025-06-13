@@ -9,7 +9,7 @@ from pathlib import Path
 import yaml
 
 
-def setup_logging(yaml_path: str | Path | None = None) -> None:
+def setup_logging(yaml_path=None) -> None:
     """Configure the application root logger.
 
     Parameters
@@ -37,12 +37,13 @@ def setup_logging(yaml_path: str | Path | None = None) -> None:
     if yaml_path.exists():
         with open(yaml_path, "r", encoding="utf-8") as fh:
             config = yaml.safe_load(fh)
-        # Replace relative filename with absolute path
+        # Replace relative filename with absolute path (use POSIX style for consistency)
         handlers = config.get("handlers", {})
         for handler in handlers.values():
             if handler.get("class") == "logging.handlers.RotatingFileHandler":
-                handler["filename"] = str(log_file)
+                handler["filename"] = (log_file).as_posix()
     else:
+        # Default configuration when no YAML is provided
         config = {
             "version": 1,
             "formatters": {
@@ -53,7 +54,7 @@ def setup_logging(yaml_path: str | Path | None = None) -> None:
             "handlers": {
                 "file": {
                     "class": "logging.handlers.RotatingFileHandler",
-                    "filename": str(log_file),
+                    "filename": log_file.as_posix(),
                     "maxBytes": 10_485_760,
                     "backupCount": 3,
                     "formatter": "default",

@@ -1,0 +1,103 @@
+0000	23 20 2d 2a 2d 20 6d 6f  64 65 3a 20 70 79 74 68   # -*- mode: pyth
+0010	6f 6e 20 3b 20 63 6f 64  69 6e 67 3a 20 75 74 66   on ; coding: utf
+0020	2d 38 20 2d 2a 2d 0d 0a  22 22 22 0d 0a 50 79 49   -8 -*-.."""..PyI
+0030	6e 73 74 61 6c 6c 65 72  20 73 70 65 63 20 66 6f   nstaller spec fo
+0040	72 20 74 68 65 20 43 61  65 6c 75 73 20 64 65 73   r the Caelus des
+0050	6b 74 6f 70 20 61 70 70  2e 0d 0a 54 68 69 73 20   ktop app...This 
+0060	76 65 72 73 69 6f 6e 20  63 6f 6c 6c 65 63 74 73   version collects
+0070	20 62 69 6e 61 72 69 65  73 20 6f 6e 6c 79 20 69    binaries only i
+0080	66 20 74 68 65 79 20 65  78 69 73 74 20 6f 6e 20   f they exist on 
+0090	74 68 65 20 62 75 69 6c  64 20 68 6f 73 74 20 73   the build host s
+00a0	6f 20 74 68 65 0d 0a 62  75 69 6c 64 20 77 6f 72   o the..build wor
+00b0	6b 73 20 6f 6e 20 57 69  6e 64 6f 77 73 2c 20 6d   ks on Windows, m
+00c0	61 63 4f 53 20 61 6e 64  20 4c 69 6e 75 78 2e 0d   acOS and Linux..
+00d0	0a 22 22 22 0d 0a 66 72  6f 6d 20 70 61 74 68 6c   ."""..from pathl
+00e0	69 62 20 69 6d 70 6f 72  74 20 50 61 74 68 0d 0a   ib import Path..
+00f0	66 72 6f 6d 20 50 79 49  6e 73 74 61 6c 6c 65 72   from PyInstaller
+0100	2e 75 74 69 6c 73 2e 68  6f 6f 6b 73 20 69 6d 70   .utils.hooks imp
+0110	6f 72 74 20 63 6f 6c 6c  65 63 74 5f 64 79 6e 61   ort collect_dyna
+0120	6d 69 63 5f 6c 69 62 73  0a 69 6d 70 6f 72 74 20   mic_libs.import 
+0130	73 79 73 0a 0d 0a 62 6c  6f 63 6b 5f 63 69 70 68   sys...block_ciph
+0140	65 72 20 3d 20 4e 6f 6e  65 0d 0a 0d 0a 0d 0a 64   er = None......d
+0150	65 66 20 5f 73 61 66 65  5f 63 6f 6c 6c 65 63 74   ef _safe_collect
+0160	28 70 61 63 6b 61 67 65  2c 20 64 65 73 74 29 3a   (package, dest):
+0170	0d 0a 20 20 20 20 22 22  22 43 6f 6c 6c 65 63 74   ..    """Collect
+0180	20 62 69 6e 61 72 69 65  73 20 66 72 6f 6d 20 2a    binaries from *
+0190	70 61 63 6b 61 67 65 2a  20 62 75 74 20 6f 6e 6c   package* but onl
+01a0	79 20 6b 65 65 70 20 74  68 6f 73 65 20 74 68 61   y keep those tha
+01b0	74 20 65 78 69 73 74 2e  22 22 22 0d 0a 20 20 20   t exist."""..   
+01c0	20 6f 75 74 20 3d 20 5b  5d 0d 0a 20 20 20 20 66    out = []..    f
+01d0	6f 72 20 73 72 63 2c 20  5f 20 69 6e 20 63 6f 6c   or src, _ in col
+01e0	6c 65 63 74 5f 64 79 6e  61 6d 69 63 5f 6c 69 62   lect_dynamic_lib
+01f0	73 28 70 61 63 6b 61 67  65 2c 20 64 65 73 74 29   s(package, dest)
+0200	3a 0d 0a 20 20 20 20 20  20 20 20 69 66 20 50 61   :..        if Pa
+0210	74 68 28 73 72 63 29 2e  69 73 5f 66 69 6c 65 28   th(src).is_file(
+0220	29 3a 0d 0a 20 20 20 20  20 20 20 20 20 20 20 20   ):..            
+0230	6f 75 74 2e 61 70 70 65  6e 64 28 28 73 72 63 2c   out.append((src,
+0240	20 64 65 73 74 29 29 0d  0a 20 20 20 20 72 65 74    dest))..    ret
+0250	75 72 6e 20 6f 75 74 0d  0a 0d 0a 0d 0a 62 69 6e   urn out......bin
+0260	61 72 69 65 73 20 3d 20  5f 73 61 66 65 5f 63 6f   aries = _safe_co
+0270	6c 6c 65 63 74 28 22 50  79 53 69 64 65 36 22 2c   llect("PySide6",
+0280	20 22 50 79 53 69 64 65  36 22 29 0a 0a 23 20 49    "PySide6")..# I
+0290	6e 63 6c 75 64 65 20 74  68 65 20 50 79 74 68 6f   nclude the Pytho
+02a0	6e 20 44 4c 4c 20 6f 6e  20 57 69 6e 64 6f 77 73   n DLL on Windows
+02b0	20 73 6f 20 74 68 65 20  62 75 6e 64 6c 65 20 63    so the bundle c
+02c0	61 6e 20 6c 6f 61 64 20  70 79 74 68 6f 6e 4e 4e   an load pythonNN
+02d0	2e 64 6c 6c 20 61 74 20  72 75 6e 74 69 6d 65 2e   .dll at runtime.
+02e0	0a 69 66 20 73 79 73 2e  70 6c 61 74 66 6f 72 6d   .if sys.platform
+02f0	2e 73 74 61 72 74 73 77  69 74 68 28 22 77 69 6e   .startswith("win
+0300	22 29 3a 0a 20 20 20 20  64 6c 6c 5f 6e 61 6d 65   "):.    dll_name
+0310	20 3d 20 66 22 70 79 74  68 6f 6e 7b 73 79 73 2e    = f"python{sys.
+0320	76 65 72 73 69 6f 6e 5f  69 6e 66 6f 2e 6d 61 6a   version_info.maj
+0330	6f 72 7d 7b 73 79 73 2e  76 65 72 73 69 6f 6e 5f   or}{sys.version_
+0340	69 6e 66 6f 2e 6d 69 6e  6f 72 7d 2e 64 6c 6c 22   info.minor}.dll"
+0350	0a 20 20 20 20 70 79 74  68 6f 6e 5f 64 6c 6c 20   .    python_dll 
+0360	3d 20 50 61 74 68 28 73  79 73 2e 65 78 65 63 75   = Path(sys.execu
+0370	74 61 62 6c 65 29 2e 77  69 74 68 5f 6e 61 6d 65   table).with_name
+0380	28 64 6c 6c 5f 6e 61 6d  65 29 0a 20 20 20 20 69   (dll_name).    i
+0390	66 20 70 79 74 68 6f 6e  5f 64 6c 6c 2e 69 73 5f   f python_dll.is_
+03a0	66 69 6c 65 28 29 3a 0a  20 20 20 20 20 20 20 20   file():.        
+03b0	62 69 6e 61 72 69 65 73  2e 69 6e 73 65 72 74 28   binaries.insert(
+03c0	30 2c 20 28 73 74 72 28  70 79 74 68 6f 6e 5f 64   0, (str(python_d
+03d0	6c 6c 29 2c 20 22 2e 22  29 29 0a 0d 0a 61 20 3d   ll), "."))...a =
+03e0	20 41 6e 61 6c 79 73 69  73 28 0d 0a 20 20 20 20    Analysis(..    
+03f0	5b 22 64 65 73 6b 74 6f  70 5f 61 70 70 2f 6d 61   ["desktop_app/ma
+0400	69 6e 2e 70 79 22 5d 2c  0d 0a 20 20 20 20 70 61   in.py"],..    pa
+0410	74 68 65 78 3d 5b 5d 2c  0d 0a 20 20 20 20 62 69   thex=[],..    bi
+0420	6e 61 72 69 65 73 3d 62  69 6e 61 72 69 65 73 2c   naries=binaries,
+0430	0d 0a 20 20 20 20 64 61  74 61 73 3d 5b 0d 0a 20   ..    datas=[.. 
+0440	20 20 20 20 20 20 20 28  22 64 65 73 6b 74 6f 70          ("desktop
+0450	5f 61 70 70 2f 72 65 73  6f 75 72 63 65 73 2f 69   _app/resources/i
+0460	63 6f 6e 73 22 2c 20 22  69 63 6f 6e 73 22 29 2c   cons", "icons"),
+0470	0d 0a 20 20 20 20 20 20  20 20 28 22 64 65 73 6b   ..        ("desk
+0480	74 6f 70 5f 61 70 70 2f  72 65 73 6f 75 72 63 65   top_app/resource
+0490	73 2f 6c 6f 67 67 69 6e  67 2e 79 61 6d 6c 22 2c   s/logging.yaml",
+04a0	20 22 2e 22 29 2c 0d 0a  20 20 20 20 5d 2c 0d 0a    "."),..    ],..
+04b0	20 20 20 20 68 69 64 64  65 6e 69 6d 70 6f 72 74       hiddenimport
+04c0	73 3d 5b 5d 2c 0d 0a 20  20 20 20 68 6f 6f 6b 73   s=[],..    hooks
+04d0	70 61 74 68 3d 5b 5d 2c  0d 0a 20 20 20 20 72 75   path=[],..    ru
+04e0	6e 74 69 6d 65 5f 68 6f  6f 6b 73 3d 5b 5d 2c 0d   ntime_hooks=[],.
+04f0	0a 20 20 20 20 63 69 70  68 65 72 3d 62 6c 6f 63   .    cipher=bloc
+0500	6b 5f 63 69 70 68 65 72  2c 0d 0a 29 0d 0a 70 79   k_cipher,..)..py
+0510	7a 20 3d 20 50 59 5a 28  61 2e 70 75 72 65 2c 20   z = PYZ(a.pure, 
+0520	61 2e 7a 69 70 70 65 64  5f 64 61 74 61 2c 20 63   a.zipped_data, c
+0530	69 70 68 65 72 3d 62 6c  6f 63 6b 5f 63 69 70 68   ipher=block_ciph
+0540	65 72 29 0d 0a 65 78 65  20 3d 20 45 58 45 28 0d   er)..exe = EXE(.
+0550	0a 20 20 20 20 70 79 7a  2c 0d 0a 20 20 20 20 61   .    pyz,..    a
+0560	2e 73 63 72 69 70 74 73  2c 0d 0a 20 20 20 20 65   .scripts,..    e
+0570	78 63 6c 75 64 65 5f 62  69 6e 61 72 69 65 73 3d   xclude_binaries=
+0580	54 72 75 65 2c 0d 0a 20  20 20 20 6e 61 6d 65 3d   True,..    name=
+0590	22 43 61 65 6c 75 73 49  6e 74 65 67 72 61 74 65   "CaelusIntegrate
+05a0	64 41 67 65 6e 74 73 22  2c 0d 0a 20 20 20 20 63   dAgents",..    c
+05b0	6f 6e 73 6f 6c 65 3d 46  61 6c 73 65 2c 0d 0a 20   onsole=False,.. 
+05c0	20 20 20 69 63 6f 6e 3d  4e 6f 6e 65 2c 0d 0a 29      icon=None,..)
+05d0	0d 0a 63 6f 6c 6c 20 3d  20 43 4f 4c 4c 45 43 54   ..coll = COLLECT
+05e0	28 0d 0a 20 20 20 20 65  78 65 2c 0d 0a 20 20 20   (..    exe,..   
+05f0	20 61 2e 62 69 6e 61 72  69 65 73 2c 0d 0a 20 20    a.binaries,..  
+0600	20 20 61 2e 7a 69 70 66  69 6c 65 73 2c 0d 0a 20     a.zipfiles,.. 
+0610	20 20 20 61 2e 64 61 74  61 73 2c 0d 0a 20 20 20      a.datas,..   
+0620	20 73 74 72 69 70 3d 46  61 6c 73 65 2c 0d 0a 20    strip=False,.. 
+0630	20 20 20 75 70 78 3d 54  72 75 65 2c 0d 0a 20 20      upx=True,..  
+0640	20 20 6e 61 6d 65 3d 22  43 61 65 6c 75 73 49 6e     name="CaelusIn
+0650	74 65 67 72 61 74 65 64  41 67 65 6e 74 73 22 2c   tegratedAgents",
+0660	0d 0a 29 0d 0a                                     ..)..

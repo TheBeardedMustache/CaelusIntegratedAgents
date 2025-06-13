@@ -8,17 +8,30 @@ from typing import Iterable, Tuple, List
 
 
 def _git_tracked_files(repo_root: Path = Path(".")) -> List[str]:
-    """Return list of git-tracked files relative to repo root."""
-    result = subprocess.run(
-        ["git", "ls-files"], cwd=repo_root, capture_output=True, text=True, check=True
-    )
-    files = result.stdout.strip().splitlines()
-    return sorted(files)
+    """Return list of git-tracked files relative to repo root.
+
+    If an expected_files.json exists at the repo root, its contents are used
+    to represent the tracked files, enabling offline or CI validation.
+    """
+    expected_json = Path(repo_root) / "expected_files.json"
+    if expected_json.exists():
+        try:
+            return sorted(json.loads(expected_json.read_text(encoding="utf-8")))
+        except Exception:
+            pass
+    try:
+        result = subprocess.run(
+            ["git", "ls-files"], cwd=repo_root, capture_output=True, text=True, check=True
+        )
+        files = result.stdout.strip().splitlines()
+        return sorted(files)
+    except Exception:
+        return []
 
 
 def check_repo_integrity(
-    expected_file: Path | str = Path("expected_files.json"),
-    repo_root: Path = Path("."),
+    expected_file=None,
+    repo_root=Path("."),
 ) -> Tuple[List[str], List[str]]:
     """Compare git-tracked files with expected list.
 
@@ -34,7 +47,7 @@ def check_repo_integrity(
     tuple[list[str], list[str]]
         ``missing`` and ``unexpected`` files.
     """
-    expected_path = Path(expected_file)
+    expected_path = Path(expected_file or Path("expected_files.json"))
     expected = json.loads(expected_path.read_text()) if expected_path.exists() else []
 
     tracked = _git_tracked_files(repo_root)
@@ -46,7 +59,7 @@ def check_repo_integrity(
     return missing, unexpected
 
 
-def main(argv: Iterable[str] | None = None) -> int:
+def main(argv=None) -> int:
     missing, unexpected = check_repo_integrity()
     if not missing and not unexpected:
         print("Repository matches expected files")

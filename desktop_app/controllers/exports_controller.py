@@ -5,17 +5,8 @@ from __future__ import annotations
 import asyncio
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction
-from PySide6.QtWidgets import (
-    QComboBox,
-    QLabel,
-    QStandardItem,
-    QStandardItemModel,
-    QTableView,
-    QToolBar,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtGui import QAction, QStandardItem, QStandardItemModel
+from PySide6.QtWidgets import QComboBox, QLabel, QTableView, QToolBar, QVBoxLayout, QWidget
 
 from ..application_state import ApplicationState
 from ..services import export_service

@@ -6,6 +6,7 @@ build works on Windows, macOS and Linux.
 """
 from pathlib import Path
 from PyInstaller.utils.hooks import collect_dynamic_libs
+import sys
 
 block_cipher = None
 
@@ -21,15 +22,31 @@ def _safe_collect(package, dest):
 
 binaries = _safe_collect("PySide6", "PySide6")
 
+if sys.platform.startswith("win"):
+    dll_name = f"python{sys.version_info.major}{sys.version_info.minor}.dll"
+    candidates = [
+        Path(sys.executable).with_name(dll_name),
+        Path(sys.base_prefix) / dll_name,
+        Path(sys.executable).parent.parent / dll_name,
+    ]
+    for dll_path in candidates:
+        if dll_path.is_file():
+            binaries.insert(0, (str(dll_path), "."))
+            break
+
+project_root = Path(__file__).resolve().parent if "__file__" in globals() else Path(sys.argv[0]).resolve().parent
+
 a = Analysis(
     ["desktop_app/main.py"],
-    pathex=[],
+    pathex=[str(project_root)],
     binaries=binaries,
     datas=[
         ("desktop_app/resources/icons", "icons"),
         ("desktop_app/resources/logging.yaml", "."),
+        # Include UI definition for QUiLoader in frozen builds
+        ("desktop_app/ui/main_window.ui", "desktop_app/ui"),
     ],
-    hiddenimports=["PySide6.QtCore", "PySide6.QtGui", "PySide6.QtWidgets"],
+    hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
     cipher=block_cipher,

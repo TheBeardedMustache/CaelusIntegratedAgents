@@ -1,0 +1,1 @@
+"""Package marker for the desktop_app module."""
