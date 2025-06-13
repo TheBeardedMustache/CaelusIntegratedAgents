@@ -6,6 +6,8 @@ cookiecutter==2.6.0
 pdfplumber==0.11.7
 psycopg2-binary==2.9.10
 
+pyyaml==6.0.2
+
 pytest==8.1.1
 apscheduler==3.11.0
 python-slugify==8.0.1
