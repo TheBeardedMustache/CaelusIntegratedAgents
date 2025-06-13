@@ -13,7 +13,10 @@ function Ensure-Venv {
 }
 
 Ensure-Venv
+
 pip install -q --upgrade -r requirements.txt
+
+
 pip install -q --upgrade pyinstaller pyside6
 
 pyinstaller --noconfirm desktop_app/resources/installer.spec
