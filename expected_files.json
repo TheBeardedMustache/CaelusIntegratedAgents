@@ -30,7 +30,7 @@
   "generator/tests/__init__.py",
   "generator/tests/test_agent_generator_run.py",
   "generator/tests/test_basic.py",
-  "logging.yaml",
+  "desktop_app/resources/logging.yaml",
   "mri.py",
   "mri_config.yaml",
   "pyproject.toml",
