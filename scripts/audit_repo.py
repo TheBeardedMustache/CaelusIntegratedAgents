@@ -3,8 +3,12 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 
 from termcolor import cprint
+
+# Allow running this script directly without installing the project
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from repo_integrity_checker import check_repo_integrity
 
