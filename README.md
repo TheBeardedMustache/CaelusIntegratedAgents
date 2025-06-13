@@ -18,3 +18,8 @@ sudo apt-get install -y libegl1 libxkbcommon-x11-0
 ```
 
 After building, run the executable from the `dist/` directory.
+
+### Custom Logging Configuration
+
+Set the `CAELUS_LOGGING_CONFIG` environment variable to the path of a YAML file
+to override the default logging setup.
