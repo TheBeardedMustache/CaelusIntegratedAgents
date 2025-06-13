@@ -10,19 +10,13 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+from ..logging_config import setup_logging
+
 import openai
 
 
-LOG_FILE = Path(__file__).resolve().parents[1] / "logs" / "caelus.log"
-LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+setup_logging()
 _LOGGER = logging.getLogger(__name__)
-if not _LOGGER.handlers:
-    handler = logging.FileHandler(LOG_FILE)
-    handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    )
-    _LOGGER.addHandler(handler)
-    _LOGGER.setLevel(logging.INFO)
 
 
 class ExportService:
