@@ -3,13 +3,22 @@
 from __future__ import annotations
 
 import logging
+import os
 from logging.config import dictConfig
 from pathlib import Path
 import yaml
 
 
 def setup_logging(yaml_path: str | Path | None = None) -> None:
-    """Configure the application root logger."""
+    """Configure the application root logger.
+
+    Parameters
+    ----------
+    yaml_path:
+        Optional path to a YAML logging configuration file. If not provided,
+        the function looks for a ``CAELUS_LOGGING_CONFIG`` environment variable
+        and falls back to ``desktop_app/resources/logging.yaml``.
+    """
     root_logger = logging.getLogger()
     if root_logger.handlers:
         return
@@ -18,7 +27,11 @@ def setup_logging(yaml_path: str | Path | None = None) -> None:
     log_file.parent.mkdir(parents=True, exist_ok=True)
 
     if yaml_path is None:
-        yaml_path = Path(__file__).resolve().parent / "resources" / "logging.yaml"
+        env_path = os.environ.get("CAELUS_LOGGING_CONFIG")
+        if env_path:
+            yaml_path = Path(env_path)
+        else:
+            yaml_path = Path(__file__).resolve().parent / "resources" / "logging.yaml"
     yaml_path = Path(yaml_path)
 
     if yaml_path.exists():
