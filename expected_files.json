@@ -43,6 +43,7 @@
   "research_extractor/agent.py",
   "research_extractor/tests/__init__.py",
   "research_extractor/tests/test_basic.py",
+  "scripts/audit_repo.py",
   "scripts/register_vectors.py",
   "scripts/star_of_caelus_pipeline.py",
   "scripts/tests/__init__.py",
