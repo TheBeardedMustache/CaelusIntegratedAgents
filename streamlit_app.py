@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 from pathlib import Path
 
@@ -27,16 +28,20 @@ st.markdown(
 if "page" not in st.session_state:
     st.session_state.page = "Dashboard"
 
-if st.sidebar.button("\ud83c\udfe0  Dashboard"):
+# ── Sidebar buttons (replace labels) ────────────────────────
+HOME_ICON = "\U0001F3E0"   # 🏠 House
+GEAR_ICON = "\u2699"       # ⚙ Gear
+
+if st.sidebar.button(f"{HOME_ICON}  Dashboard"):
     st.session_state.page = "Dashboard"
-if st.sidebar.button("\u2699  Settings"):
+if st.sidebar.button(f"{GEAR_ICON}  Settings"):
     st.session_state.page = "Settings"
 
 # -----------------------------------------------------------------------------
 # Dashboard page
 
 def dashboard_page() -> None:
-    st.header("🜂  Seraph Control\xa0Center")
+    st.header("\U0001F702  Seraph Control\xa0Center")
 
     # Chat area ---------------------------------------------------------------
     if "seraph_history" not in st.session_state:
