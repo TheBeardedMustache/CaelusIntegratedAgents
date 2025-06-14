@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  app:
+    build: ..
+    command: python streamlit_app.py
+    volumes:
+      - ..:/app
+    ports:
+      - '8501:8501'
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: caelus
+      POSTGRES_PASSWORD: caelus
+      POSTGRES_DB: caelus
+    ports:
+      - '5432:5432'
+  redis:
+    image: redis:7
+    ports:
+      - '6379:6379'
