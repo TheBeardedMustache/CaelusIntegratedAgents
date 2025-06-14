@@ -79,7 +79,8 @@ def settings_page():
 
     log_file = Path(__file__).resolve().parent / "desktop_app" / "logs" / "caelus.log"
     if log_file.exists():
-        st.text_area("Log", log_file.read_text(encoding="utf-8"), height=300)
+        txt = log_file.read_bytes().decode("utf-8", errors="replace")
+        st.text_area("Log", txt, height=300)
 
 
 def main():
