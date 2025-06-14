@@ -6,14 +6,13 @@ cookiecutter==2.6.0
 pdfplumber==0.11.7
 psycopg2-binary==2.9.10
 
-pyyaml==6.0.2
+pyyaml>=6.0
 
 pytest==8.1.1
 apscheduler==3.11.0
 python-slugify==8.0.1
-streamlit==1.32.2
-pyyaml>=6.0
-tenacity  # required by retriable_openai from awesome-llm-apps
+streamlit>=1.33
+tenacity>=8.2  # required by retriable_openai from awesome-llm-apps
 numpy; extra == "voice"
 websockets; extra == "voice"
 # no extra deps for openai-agents[voice]
