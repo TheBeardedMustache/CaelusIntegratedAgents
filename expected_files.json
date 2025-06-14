@@ -616,6 +616,7 @@
   "awesome-llm-apps-main/voice_ai_agents/voice_rag_openaisdk/rag_voice.py",
   "awesome-llm-apps-main/voice_ai_agents/voice_rag_openaisdk/requirements.txt",
   "desktop_app/application_state.py",
+  "desktop_app/app_state.py",
   "desktop_app/logging_config.py",
   "desktop_app/resources/logging.yaml",
   "desktop_app/services/agent_manager.py",

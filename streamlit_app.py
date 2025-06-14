@@ -3,7 +3,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from desktop_app.application_state import ApplicationState
+from desktop_app.app_state import STATE
 from desktop_app.services.agent_manager import AgentManager
 from archagents import ARCHAGENTS
 from desktop_app.services.export_service import ExportService
@@ -16,7 +16,7 @@ st.set_page_config(page_title="Caelus Agents", layout="wide")
 
 def dashboard_page():
     st.header("Dashboard")
-    st.write(ApplicationState().stats or "No stats yet")
+    st.write(STATE.stats if STATE.stats else "No stats yet")
 
 
 def exports_page():
