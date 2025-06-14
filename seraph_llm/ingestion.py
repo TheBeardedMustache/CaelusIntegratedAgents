@@ -1,7 +1,7 @@
 """Utilities for loading doctrine text into the MRI store."""
 from pathlib import Path
 
-from .memory import add_document
+from seraph_llm.memory import add_document
 
 
 def ingest_doctrine(doctrine_dir: Path) -> None:
