@@ -3,7 +3,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from desktop_app.app_state import STATE
+from desktop_app.application_state import STATE
 from desktop_app.services.agent_manager import AgentManager
 from archagents import ARCHAGENTS
 from desktop_app.services.export_service import ExportService
