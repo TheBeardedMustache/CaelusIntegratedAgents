@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  seraph:
+    build: ..
+    volumes:
+      - ..:/app
+    command: /bin/bash -c "pip install -r seraph_llm/requirements.txt && python seraph_llm/chain.py"
