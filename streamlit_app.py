@@ -5,7 +5,7 @@ import streamlit as st
 
 from desktop_app.app_state import STATE
 from desktop_app.services.agent_manager import AgentManager
-from archagents import ARCHAGENTS
+from archagents import ARCHAGENTS, load as load_arch, get_meta
 from desktop_app.services.export_service import ExportService
 from desktop_app.services.json_settings import JsonSettings
 
@@ -92,20 +92,27 @@ def main():
     elif page == "Agents":
         agents_page()
     elif page == "Archagents":
-        st.header("Master Archagent Console")
-        manager = AgentManager()
+        st.header("🜂  Master Archagent Console")
+        st.markdown("### Hierarchy")
+        mgr = AgentManager()
+        tree = mgr.arch_hierarchy()
+        with st.container():
+            st.json(tree, expanded=False)
+
+        st.divider()
         for arch in ARCHAGENTS:
-            with st.expander(f"{arch['glyph']}  {arch['title']}"):
-                st.write(arch["mandate"])
-                st.write("Child agents: " + ", ".join(arch["child_agents"]))
-                col1, col2 = st.columns(2)
-                if col1.button("Run Now", key=f"run_{arch['id']}"):
-                    manager.run_agent(arch["id"], arch["default_intent"], target_id="demo")
-                    st.success("Invocation dispatched")
-                cron = col2.text_input("Cron (e.g. 0 9 * * *)", key=f"cron_{arch['id']}")
-                if col2.button("Schedule", key=f"sch_{arch['id']}") and cron:
-                    manager.schedule_agent(arch["id"], arch["default_intent"], cron)
-                    st.info("Scheduled")
+            with st.expander(f"{arch['glyph']}  **{arch['title']}** — {arch['mandate']}"):
+                cols = st.columns([3,1,1])
+                with cols[0]:
+                    st.write(f"Child agents: `{', '.join(arch['child_agents'])}`")
+                if cols[1].button("Run", key=f"run_{arch['id']}"):
+                    res = mgr.run_agent(arch['id'], arch['default_intent'], target_id='demo')
+                    st.success(res)
+                if cols[2].button("Chat", key=f"chat_{arch['id']}"):
+                    prompt = st.text_input("Your message:", key=f"msg_{arch['id']}")
+                    if st.button("Send", key=f"send_{arch['id']}"):
+                        result = load_arch(arch['id']).run(message=prompt)
+                        st.info(result)
     else:
         settings_page()
 

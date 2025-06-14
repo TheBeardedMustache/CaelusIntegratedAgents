@@ -20,6 +20,11 @@ from apscheduler.triggers.cron import CronTrigger
 _EXCLUDE_PKGS = {"agents.voice", "agents.text_to_speech", "agents.audio_tools"}
 
 
+def run_agent(name: str, intent: str, **kwargs):
+    """Convenience wrapper using a temporary manager instance."""
+    return AgentManager().run_agent(name, intent, **kwargs)
+
+
 class AgentManager:
     """Launch agents and maintain watchdogs."""
 
@@ -126,3 +131,11 @@ class AgentManager:
     def stop(self) -> None:
         """Stop the scheduler."""
         self.scheduler.shutdown()
+
+    # ------------------------------------------------------------------
+    def arch_hierarchy(self):
+        from archagents import ARCHAGENTS
+        by_id = {a["id"]: a for a in ARCHAGENTS}
+        root = "seraph"
+        tree = {root: by_id[root]["child_agents"]}
+        return tree
