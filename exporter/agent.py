@@ -5,7 +5,10 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
-from docx import Document
+try:
+    from docx import Document
+except ImportError:
+    Document = None
 
 log = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 """CLI entry point for repository audits."""
 from __future__ import annotations
+from typing import Optional, List
 
 import argparse
 from pathlib import Path
@@ -13,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from repo_integrity_checker import check_repo_integrity
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Audit repository contents")
     parser.add_argument(
         "--expected-file",

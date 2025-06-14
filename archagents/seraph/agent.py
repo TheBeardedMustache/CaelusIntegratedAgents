@@ -4,6 +4,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from agents.common.retriable_openai import openai_chat_completion
 from desktop_app.services.agent_manager import run_agent
 from archagents import get_meta
+from typing import Optional
 
 MEM_DB = Path("seraph_memory.json")
 log = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ class Archagent:
             temperature=0.2,
         )
 
-    def run(self, *, intent: str = "orchestrate", message: str | None = None, **kw):
+    def run(self, *, intent: str = "orchestrate", message: Optional[str] = None, **kw):
         if message:
             self.history.append({"role": "user", "content": message})
             _save_mem(self.history)

@@ -2,7 +2,12 @@
 import streamlit as st
 from pathlib import Path
 
-from archagents import ARCHAGENTS, load as load_arch
+from archagents import ARCHAGENTS as _ARCHAGENTS, load as load_arch
+# make sure ARCHAGENTS is a list, even if the package emitted a dict-based schema
+if isinstance(_ARCHAGENTS, dict):
+    ARCHAGENTS = _ARCHAGENTS.get("agents", [])
+else:
+    ARCHAGENTS = _ARCHAGENTS
 from desktop_app.services.agent_manager import AgentManager
 from awesome_loader import discover_extra_agents
 
