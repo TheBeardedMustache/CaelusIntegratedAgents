@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import json
 import pkgutil
+import pkg_resources
 import subprocess
 import sys
 from datetime import datetime
@@ -15,6 +16,8 @@ from archagents import ARCHAGENTS, load as load_archagent
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+
+_EXCLUDE_PKGS = {"agents.voice", "agents.text_to_speech", "agents.audio_tools"}
 
 
 class AgentManager:
@@ -40,7 +43,19 @@ class AgentManager:
             json.dump(self.settings, fh)
 
     # ------------------------------------------------------------------
+    def _discover_packages(self) -> None:
+        """Import agent packages exposed via entry points."""
+        for info in pkg_resources.iter_entry_points("openai_agents"):
+            if any(info.module_name.startswith(p) for p in _EXCLUDE_PKGS):
+                continue
+            try:
+                importlib.import_module(info.module_name)
+            except Exception:  # pragma: no cover - third-party import failed
+                continue
+
+    # ------------------------------------------------------------------
     def _list_module_agents(self) -> List[Dict[str, Any]]:
+        self._discover_packages()
         try:
             pkg = importlib.import_module("agents")
         except ModuleNotFoundError:
