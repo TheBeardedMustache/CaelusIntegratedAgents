@@ -4,10 +4,11 @@ from pathlib import Path
 import streamlit as st
 
 from desktop_app.application_state import ApplicationState
-from desktop_app.controllers.agents_controller import AgentsController
 from desktop_app.services.agent_manager import AgentManager
 from desktop_app.services.export_service import ExportService
 from desktop_app.services.json_settings import JsonSettings
+
+DEFAULT_INTENT = "default"
 
 st.set_page_config(page_title="Caelus Agents", layout="wide")
 
@@ -58,7 +59,7 @@ def agents_page():
     st.write(f"Last run: {agent.get('last_run', 'N/A')}")
 
     if st.button("Run Now"):
-        manager.run_agent(agent["name"], AgentsController.DEFAULT_INTENT)
+        manager.run_agent(agent["name"], DEFAULT_INTENT)
         st.success("Agent executed")
 
 
