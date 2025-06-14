@@ -1,121 +1,99 @@
-import asyncio
+import streamlit as st
 from pathlib import Path
 
-import streamlit as st
-
-from desktop_app.app_state import STATE
+from archagents import ARCHAGENTS, load as load_arch
 from desktop_app.services.agent_manager import AgentManager
-from archagents import ARCHAGENTS, load as load_arch, get_meta
-from desktop_app.services.export_service import ExportService
-from desktop_app.services.json_settings import JsonSettings
+from awesome_loader import discover_extra_agents
 
-DEFAULT_INTENT = "default"
+st.set_page_config(page_title="Caelus Integrated Agents", layout="wide")
 
-st.set_page_config(page_title="Caelus Agents", layout="wide")
+# -----------------------------------------------------------------------------
+# Style tweaks
+st.markdown(
+    """
+    <style>
+      section[data-testid="stSidebar"] button {
+        width: 100%;
+        margin: 6px 0 !important;
+        border-radius: 6px;
+      }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
+# -----------------------------------------------------------------------------
+# Sidebar navigation
+if "page" not in st.session_state:
+    st.session_state.page = "Dashboard"
 
-def dashboard_page():
-    st.header("Dashboard")
-    st.write(STATE.stats if STATE.stats else "No stats yet")
+if st.sidebar.button("\ud83c\udfe0  Dashboard"):
+    st.session_state.page = "Dashboard"
+if st.sidebar.button("\u2699  Settings"):
+    st.session_state.page = "Settings"
 
+# -----------------------------------------------------------------------------
+# Dashboard page
 
-def exports_page():
-    st.header("Exports")
-    service = ExportService()
+def dashboard_page() -> None:
+    st.header("🜂  Seraph Control\xa0Center")
 
-    if st.button("Scan Now"):
-        st.session_state.export_data = asyncio.run(service.scan_chatgpt())
+    # Chat area ---------------------------------------------------------------
+    if "seraph_history" not in st.session_state:
+        st.session_state.seraph_history = []
 
-    data = st.session_state.get("export_data", [])
-    if data:
-        fmt = st.selectbox("Format", ["docx", "pdf"], key="fmt")
-        font = st.selectbox("Font", ["Arial", "Times New Roman"], key="font")
-        selected = []
-        for item in data:
-            label = f"{item.get('title', '')} ({item.get('type', '')})"
-            if st.checkbox(label, key=item.get("id")):
-                selected.append(item.get("id"))
-        if st.button("Export Selected") and selected:
-            for item_id in selected:
-                service.export(item_id, fmt, font)
-            st.success("Export complete")
-    else:
-        st.write("No export data loaded.")
+    chat_container = st.container()
+    for msg in st.session_state.seraph_history:
+        chat_container.chat_message(msg["role"]).write(msg["content"])
 
+    user_input = st.chat_input("Ask Seraph…")
+    if user_input:
+        st.session_state.seraph_history.append({"role": "user", "content": user_input})
+        seraph = load_arch("seraph")
+        response = seraph.run(message=user_input)
+        st.session_state.seraph_history.append({"role": "assistant", "content": str(response)})
+        chat_container.chat_message("assistant").write(response)
 
-def agents_page():
-    st.header("Agents")
-    manager = AgentManager()
-    agents = manager.list_agents()
+    st.divider()
 
-    if not agents:
-        st.info("No agents available")
-        return
+    # Archagents & Agents Overview ------------------------------------------
+    mgr = AgentManager()
+    extra = discover_extra_agents()
+    all_archs = ARCHAGENTS + extra["archagents"]
+    all_agents = mgr.list_agents() + extra["agents"]
 
-    names = [a.get("name", "") for a in agents]
-    index = st.selectbox("Select Agent", range(len(names)), format_func=lambda i: names[i])
-    agent = agents[index]
+    for arch in all_archs:
+        with st.expander(f"{arch['glyph']} **{arch['title']}** — {arch['mandate']}"):
+            st.write(f"Child agents: `{', '.join(arch['child_agents'])}`")
+            col1, col2 = st.columns(2)
+            if col1.button("Run", key=f"run_{arch['id']}"):
+                result = mgr.run_agent(arch["id"], arch["default_intent"], target_id="demo")
+                st.success(result)
+            if col2.button("Schedule", key=f"sch_{arch['id']}"):
+                st.info("Scheduler wiring TBD")
 
-    st.write(agent.get("description", ""))
-    st.write(f"Last run: {agent.get('last_run', 'N/A')}")
+    st.divider()
+    st.subheader("Choir Agents")
+    for ag in all_agents:
+        st.write(f"* **{ag['name']}** — _{ag.get('description','')}_")
 
-    if st.button("Run Now"):
-        manager.run_agent(agent["name"], DEFAULT_INTENT)
-        st.success("Agent executed")
+# -----------------------------------------------------------------------------
+# Settings page retains simple log viewer
 
-
-def settings_page():
-    st.header("Settings")
-    settings = JsonSettings()
-    data = settings.load()
-
-    exports = st.text_input("Exports Folder", value=data.get("paths", {}).get("exports", ""))
-    temp = st.text_input("Temp Folder", value=data.get("paths", {}).get("temp", ""))
-    if st.button("Save"):
-        data.setdefault("paths", {})["exports"] = exports
-        data["paths"]["temp"] = temp
-        settings.save(data)
-        st.success("Settings saved")
-
-    log_file = Path(__file__).resolve().parent / "desktop_app" / "logs" / "caelus.log"
+def settings_page() -> None:
+    st.header("Logs")
+    log_file = Path("desktop_app/logs/caelus.log")
     if log_file.exists():
         txt = log_file.read_bytes().decode("utf-8", errors="replace")
         st.text_area("Log", txt, height=300)
-
-
-def main():
-    page = st.sidebar.radio("Page", ["Dashboard", "Exports", "Agents", "Archagents", "Settings"])
-    if page == "Dashboard":
-        dashboard_page()
-    elif page == "Exports":
-        exports_page()
-    elif page == "Agents":
-        agents_page()
-    elif page == "Archagents":
-        st.header("🜂  Master Archagent Console")
-        st.markdown("### Hierarchy")
-        mgr = AgentManager()
-        tree = mgr.arch_hierarchy()
-        with st.container():
-            st.json(tree, expanded=False)
-
-        st.divider()
-        for arch in ARCHAGENTS:
-            with st.expander(f"{arch['glyph']}  **{arch['title']}** — {arch['mandate']}"):
-                cols = st.columns([3,1,1])
-                with cols[0]:
-                    st.write(f"Child agents: `{', '.join(arch['child_agents'])}`")
-                if cols[1].button("Run", key=f"run_{arch['id']}"):
-                    res = mgr.run_agent(arch['id'], arch['default_intent'], target_id='demo')
-                    st.success(res)
-                if cols[2].button("Chat", key=f"chat_{arch['id']}"):
-                    prompt = st.text_input("Your message:", key=f"msg_{arch['id']}")
-                    if st.button("Send", key=f"send_{arch['id']}"):
-                        result = load_arch(arch['id']).run(message=prompt)
-                        st.info(result)
     else:
-        settings_page()
+        st.info("No log file yet.")
 
+# -----------------------------------------------------------------------------
+# Router
 
-if __name__ == "__main__":
-    main()
+page = st.session_state.page
+if page == "Dashboard":
+    dashboard_page()
+else:
+    settings_page()
