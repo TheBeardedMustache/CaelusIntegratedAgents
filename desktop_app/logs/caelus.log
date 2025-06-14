@@ -1,0 +1,2 @@
+2025-06-13 22:57:57,541 — INFO — desktop_app.services.export_service — Listing stored chat completions from OpenAI
+2025-06-13 22:57:58,698 — INFO — desktop_app.services.export_service — Retrieved 0 chats from OpenAI
