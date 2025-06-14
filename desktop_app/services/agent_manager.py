@@ -5,7 +5,10 @@ from __future__ import annotations
 import importlib
 import json
 import pkgutil
-import pkg_resources
+try:
+    import pkg_resources
+except Exception:  # pragma: no cover - may be missing in minimal env
+    pkg_resources = None
 import subprocess
 import sys
 from datetime import datetime
@@ -18,6 +21,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 _EXCLUDE_PKGS = {"agents.voice", "agents.text_to_speech", "agents.audio_tools"}
+
+
+def run_agent(name: str, intent: str, **kwargs):
+    """Convenience wrapper using a temporary manager instance."""
+    return AgentManager().run_agent(name, intent, **kwargs)
 
 
 class AgentManager:
@@ -45,6 +53,8 @@ class AgentManager:
     # ------------------------------------------------------------------
     def _discover_packages(self) -> None:
         """Import agent packages exposed via entry points."""
+        if not pkg_resources:  # pragma: no cover - missing dependency
+            return
         for info in pkg_resources.iter_entry_points("openai_agents"):
             if any(info.module_name.startswith(p) for p in _EXCLUDE_PKGS):
                 continue
@@ -126,3 +136,11 @@ class AgentManager:
     def stop(self) -> None:
         """Stop the scheduler."""
         self.scheduler.shutdown()
+
+    # ------------------------------------------------------------------
+    def arch_hierarchy(self):
+        from archagents import ARCHAGENTS
+        by_id = {a["id"]: a for a in ARCHAGENTS}
+        root = "seraph"
+        tree = {root: by_id[root]["child_agents"]}
+        return tree
