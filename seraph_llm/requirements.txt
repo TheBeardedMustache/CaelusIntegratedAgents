@@ -1,0 +1,5 @@
+redis
+psycopg2-binary
+langchain
+openai
+faiss-cpu
