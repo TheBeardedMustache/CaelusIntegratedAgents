@@ -139,8 +139,9 @@ class AgentManager:
 
     # ------------------------------------------------------------------
     def arch_hierarchy(self):
-        from archagents import ARCHAGENTS
-        by_id = {a["id"]: a for a in ARCHAGENTS}
+        from archagents import ARCHAGENTS, META
         root = "seraph"
-        tree = {root: by_id[root]["child_agents"]}
-        return tree
+        by_id = {a["id"]: a for a in ARCHAGENTS}
+        if root not in by_id:
+            return {}
+        return {root: by_id[root].get("child_agents", [])}
