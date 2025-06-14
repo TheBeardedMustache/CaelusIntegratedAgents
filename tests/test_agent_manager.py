@@ -52,7 +52,7 @@ def test_list_agents(monkeypatch):
 
     manager = AgentManager()
     agents = manager.list_agents()
-    assert agents == [{"name": "foo", "description": "Foo agent.", "last_run": "yesterday"}]
+    assert {"name": "foo", "description": "Foo agent.", "last_run": "yesterday"} in agents
 
 
 def test_run_and_schedule(monkeypatch):

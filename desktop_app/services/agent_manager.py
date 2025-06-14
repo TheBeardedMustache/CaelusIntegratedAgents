@@ -11,6 +11,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
+from archagents import ARCHAGENTS, load as load_archagent
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
@@ -38,8 +40,7 @@ class AgentManager:
             json.dump(self.settings, fh)
 
     # ------------------------------------------------------------------
-    def list_agents(self) -> List[Dict[str, Any]]:
-        """Return available agents with metadata."""
+    def _list_module_agents(self) -> List[Dict[str, Any]]:
         try:
             pkg = importlib.import_module("agents")
         except ModuleNotFoundError:
@@ -49,7 +50,6 @@ class AgentManager:
         schedules = self.settings.get("schedules", {})
         for info in pkgutil.iter_modules(pkg.__path__):
             module = importlib.import_module(f"agents.{info.name}")
-            # Safely extract first line of docstring or default to empty
             doc = module.__doc__ or ""
             lines = doc.strip().splitlines()
             desc = lines[0] if lines else ""
@@ -58,8 +58,16 @@ class AgentManager:
         return agents
 
     # ------------------------------------------------------------------
-    def run_agent(self, name: str, intent: str) -> None:
-        """Run the given agent via the Star of Caelus pipeline."""
+    def list_agents(self) -> List[Dict[str, Any]]:
+        base = self._list_module_agents()
+        arch = [
+            {"name": a["id"], "description": a["mandate"], "type": "archagent"}
+            for a in ARCHAGENTS
+        ]
+        return base + arch
+
+    # ------------------------------------------------------------------
+    def _run_module_agent(self, name: str, intent: str) -> None:
         script = Path(__file__).resolve().parents[2] / "scripts" / "star_of_caelus_pipeline.py"
         cmd = [sys.executable, str(script), "--intent", intent, "--agent", name]
         subprocess.check_call(cmd)
@@ -68,6 +76,11 @@ class AgentManager:
         entry = schedules.setdefault(name, {"intent": intent, "cron": None})
         entry["last_run"] = datetime.utcnow().isoformat()
         self._save_settings()
+
+    def run_agent(self, name: str, intent: str, **kwargs):
+        if name in {a["id"] for a in ARCHAGENTS}:
+            return load_archagent(name).run(intent=intent, **kwargs)
+        return self._run_module_agent(name, intent)
 
     # ------------------------------------------------------------------
     def _schedule_job(self, name: str, intent: str, cron_expr: str, save: bool = True) -> None:

@@ -1,0 +1,15 @@
+- id: michael
+  title: Archagent Michael
+  glyph: "☩"
+  code_package: archagents.michael.agent
+  mandate: "Guardian of Truth"
+  child_agents: ["exporter"]
+  default_intent: "audit_export"
+- id: gabriel
+  title: Archagent Gabriel
+  glyph: "⚚"
+  code_package: archagents.gabriel.agent
+  mandate: "Messenger of Insight"
+  child_agents: ["research_extractor"]
+  default_intent: "deep_summarise"
+# (add more archangels later)
