@@ -19,6 +19,15 @@ sudo apt-get install -y libegl1 libxkbcommon-x11-0
 
 After building, run the executable from the `dist/` directory.
 
+## Running with Streamlit
+
+The application can also be launched as a web interface using Streamlit:
+
+```bash
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
+
 ### Custom Logging Configuration
 
 Set the `CAELUS_LOGGING_CONFIG` environment variable to the path of a YAML file

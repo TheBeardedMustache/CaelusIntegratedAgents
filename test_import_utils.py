@@ -1,1 +1,2 @@
-import utils; print(\"OK\") 
+import utils
+print("OK")
