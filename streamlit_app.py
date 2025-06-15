@@ -13,6 +13,29 @@ from awesome_loader import discover_extra_agents
 
 st.set_page_config(page_title="Caelus Integrated Agents", layout="wide")
 
+# ▶ ENSURE_SERAPH_CHAT_UI
+# --- Chat session state ---
+if "seraph_history" not in st.session_state:
+    st.session_state.seraph_history = []
+
+# --- Chat window ---
+chat_pane = st.container(height=560)
+for m in st.session_state.seraph_history:
+    chat_pane.chat_message(m["role"]).markdown(m["content"])
+
+user_text = st.chat_input("Ask Seraph…")
+if user_text:
+    st.session_state.seraph_history.append({"role": "user", "content": user_text})
+    from seraph_llm.chain import ask_seraph
+    reply = ask_seraph(user_text)
+    if isinstance(reply, dict):
+        # If CALL_AGENT JSON, just prettify for display
+        reply_msg = f"```json\n{reply}\n```"
+    else:
+        reply_msg = reply
+    st.session_state.seraph_history.append({"role": "assistant", "content": reply_msg})
+    chat_pane.chat_message("assistant").markdown(reply_msg)
+
 # -----------------------------------------------------------------------------
 # Style tweaks
 st.markdown(
