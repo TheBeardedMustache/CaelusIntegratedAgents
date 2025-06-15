@@ -16,4 +16,4 @@ tenacity>=8.2  # required by retriable_openai from awesome-llm-apps
 numpy; extra == "voice"
 websockets; extra == "voice"
 # no extra deps for openai-agents[voice]
-langchain-community
+langchain-community>=0.0.2  # required for RedisChatMessageHistory
